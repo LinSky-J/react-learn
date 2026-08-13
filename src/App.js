@@ -1,4 +1,5 @@
 import EventBinding from './EventBinding';
+import ComponentDemo from './ComponentDemo';
 
 // App->index.js->public/index.html(root)
 const count = 100
@@ -31,7 +32,10 @@ function getArticleJSX() {
 function App() {
   return (
     <div className="App">
-      {/* 渲染 React 事件绑定组件示例 */}
+      {/* 1. 渲染 React 组件调用示例 */}
+      <ComponentDemo />
+      <hr />
+      {/* 2. 渲染 React 事件绑定组件示例 */}
       <EventBinding />
     </div>
   );
