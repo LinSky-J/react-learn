@@ -4,7 +4,8 @@
 // 1. 使用 useState 管理评论列表状态与输入框状态
 // 2. 当前登录用户定义 (currentUser)
 // 3. 【核心条件渲染】：只能删除自己发布的评论 (comment.user.id === currentUser.id)
-// 4. 支持点赞 / 动态发布评论 / 用户身份切换测试
+// 4. 使用 lodash (_.orderBy) 进行最热/最新数据排序
+// 5. 使用 classNames 工具库进行 active 高亮类名动态绑定
 // ==========================================
 
 import React, { useState } from 'react';
@@ -57,7 +58,7 @@ const initialComments = [
   }
 ];
 
-// 导航 Tab 列表数据 (包含 type 与 text)
+// 导航 Tab 列表数据 (包含 type 与 text 属性)
 const tabs = [
   { type: 'hot', text: '最热' },
   { type: 'time', text: '最新' }
@@ -89,14 +90,14 @@ function CommentDemo() {
   // ------------------------------------------
   const [type, setType] = useState('hot');
 
-  // 切换 Tab 点击处理函数
+  // 切换 Tab 点击处理函数（记录点击项的 type 标识）
   const handleTabChange = (type) => {
     setType(type);
   };
 
   // 使用 lodash 的 orderBy 方法根据当前 type 动态计算排序后的评论列表
-  // type === 'hot' 按点赞数 'like' 降序 ('desc')
-  // type === 'time' 按发布时间戳 'rpid' 降序 ('desc')
+  // - type === 'hot' 按点赞数 'like' 降序 ('desc')
+  // - type === 'time' 按发布时间戳 'rpid' 降序 ('desc')
   const displayComments = _.orderBy(
     comments,
     type === 'hot' ? 'like' : 'rpid',
@@ -197,7 +198,7 @@ function CommentDemo() {
         </div>
       </div>
 
-      {/* 评论头部：评论数量与【最热 | 最新】排序选项（完全还原截图组件） */}
+      {/* 评论头部：评论数量与【最热 | 最新】排序选项 */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '30px', marginBottom: '20px' }}>
         {/* 左侧：标题与总数 */}
         <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
@@ -205,16 +206,17 @@ function CommentDemo() {
           <span style={{ fontSize: '14px', color: '#9499a0' }}>{comments.length}</span>
         </div>
 
-        {/* 右侧：循环渲染 tabs 数组标签，使用 classNames 优化控制 active 动态高亮类名 */}
+        {/* 右侧：循环渲染 tabs 数组标签，使用 classNames 工具函数优雅拼接 active 高亮类名 */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px' }}>
           {tabs.map((item, index) => (
             <React.Fragment key={item.type}>
               <span
                 onClick={() => handleTabChange(item.type)}
+                // 使用 classNames 工具函数拼装 nav-item 与 active 动态高亮类名
                 className={classNames('nav-item', { active: type === item.type })}>
                 {item.text}
               </span>
-              {/* 分隔符 '|' */}
+              {/* 渲染分隔符 '|' */}
               {index < tabs.length - 1 && <span style={{ color: '#e3e5e7' }}>|</span>}
             </React.Fragment>
           ))}
@@ -295,7 +297,6 @@ function CommentDemo() {
 
                 {/* ========================================================== */}
                 {/* 核心需求：只能删除自己发布的评论 (item.user.id === currentUser.id) */}
-                {/* 条件渲染判断：只有发布者 ID 与 当前登录用户 ID 一致时才渲染删除按钮 */}
                 {/* ========================================================== */}
                 {item.user.id === currentUser.id && (
                   <button

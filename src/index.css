@@ -1,18 +1,4 @@
-/* 评论区 Tab 导航选项样式 */
-.nav-item {
-  cursor: pointer;
-  color: #9499a0;
-  font-size: 14px;
-  font-weight: normal;
-  transition: all 0.2s ease;
-}
+.foo {
+    color: blue;
 
-.nav-item:hover {
-  color: #00aeec;
-}
-
-/* 高亮样式 (匹配当前记录的 type 时添加 active 类) */
-.nav-item.active {
-  color: #222222;
-  font-weight: bold;
 }
