@@ -9,6 +9,7 @@
 
 import React, { useState } from 'react';
 import _ from 'lodash';
+import classNames from 'classnames';
 import './index.css';
 import avatarCurrent from './avatar_current.jpg';
 import avatarOther from './avatar_1.jpg';
@@ -204,13 +205,13 @@ function CommentDemo() {
           <span style={{ fontSize: '14px', color: '#9499a0' }}>{comments.length}</span>
         </div>
 
-        {/* 右侧：循环渲染 tabs 数组标签，匹配 type===item.type 设置高亮类名 active */}
+        {/* 右侧：循环渲染 tabs 数组标签，使用 classNames 优化控制 active 动态高亮类名 */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px' }}>
           {tabs.map((item, index) => (
             <React.Fragment key={item.type}>
               <span
                 onClick={() => handleTabChange(item.type)}
-                className={type === item.type ? 'nav-item active' : 'nav-item'}>
+                className={classNames('nav-item', { active: type === item.type })}>
                 {item.text}
               </span>
               {/* 分隔符 '|' */}
