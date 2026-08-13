@@ -199,17 +199,13 @@ function CommentDemo() {
           <span style={{ fontSize: '14px', color: '#9499a0' }}>{comments.length}</span>
         </div>
 
-        {/* 右侧：循环渲染 tabs 数组标签，点击对应的 tab 即高亮并切换排序 */}
+        {/* 右侧：循环渲染 tabs 数组标签，匹配 type===item.type 设置高亮类名 active */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px' }}>
           {tabs.map((item, index) => (
             <React.Fragment key={item.type}>
               <span
                 onClick={() => handleTabChange(item.type)}
-                style={{
-                  cursor: 'pointer',
-                  fontWeight: type === item.type ? 'bold' : 'normal',
-                  color: type === item.type ? '#222' : '#9499a0'
-                }}>
+                className={type === item.type ? 'nav-item active' : 'nav-item'}>
                 {item.text}
               </span>
               {/* 分隔符 '|' */}
