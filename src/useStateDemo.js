@@ -68,7 +68,7 @@ function UseStateDemo() {
         <h4 style={{ margin: '0 0 10px 0', color: '#1890ff' }}>📌 useState 修改状态的 4 大核心规则：</h4>
         <ol style={{ margin: 0, paddingLeft: '20px' }}>
           <li><strong>状态不可变原则：</strong>禁止直接修改状态变量（如 <code>count++</code> 或 <code>user.age=19</code>）。必须通过 <code>setState</code> 传入新值或新对象。</li>
-          <li><strong>使用新引用替换：</strong>修改对象/数组时，使用展开运算符 <code>...</code> 产生新对象/数组（如 <code>setUser({...user, age: 19})</code>）。</li>
+          <li><strong>使用新引用替换：</strong>修改对象/数组时，使用展开运算符 <code>...</code> 产生新对象/数组（如 <code>{"setUser({...user, age: 19})"}</code>）。</li>
           <li><strong>修改状态触发重渲染：</strong>调用 <code>setState</code> 会触发 React 重新执行组件函数并更新 DOM 视图。</li>
           <li><strong>只在顶层调用：</strong>Hook 只能在函数组件最顶层调用，严禁写在 <code>if</code>、循环或嵌套函数中。</li>
         </ol>
