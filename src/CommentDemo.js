@@ -8,6 +8,7 @@
 // ==========================================
 
 import React, { useState } from 'react';
+import _ from 'lodash';
 import './index.css';
 import avatarCurrent from './avatar_current.jpg';
 import avatarOther from './avatar_1.jpg';
@@ -90,13 +91,14 @@ function CommentDemo() {
     setType(type);
   };
 
-  // 根据当前 type 动态计算排序后的评论列表
-  const displayComments = [...comments].sort((a, b) => {
-    if (type === 'hot') {
-      return b.like - a.like; // 按点赞数降序排列
-    }
-    return b.rpid - a.rpid; // 按最新时间 (rpid时间戳) 降序排列
-  });
+  // 使用 lodash 的 orderBy 方法根据当前 type 动态计算排序后的评论列表
+  // type === 'hot' 按点赞数 'like' 降序 ('desc')
+  // type === 'time' 按发布时间戳 'rpid' 降序 ('desc')
+  const displayComments = _.orderBy(
+    comments,
+    type === 'hot' ? 'like' : 'rpid',
+    'desc'
+  );
 
   // ------------------------------------------
   // 删除评论处理函数
