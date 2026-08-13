@@ -49,9 +49,13 @@ const initialComments = [
     },
     content: '主后端的，新公司活少，抽空看看React，视频全程开弹幕，叽叽歪歪的人太多了，讲一个东西就有人跳出来讲Vue，都是搬砖工具，框架有相似之处是好事，学起来方便。只能说这些人班是没上的，懂哥是要当的。',
     ctime: '2024-08-07 09:33',
-    like: 94,
-    isLike: false
   }
+];
+
+// 导航 Tab 列表数据 (包含 type 与 text)
+const tabs = [
+  { type: 'hot', text: '最热' },
+  { type: 'time', text: '最新' }
 ];
 
 function CommentDemo() {
@@ -76,13 +80,18 @@ function CommentDemo() {
   const [inputText, setInputText] = useState('');
 
   // ------------------------------------------
-  // 4. 排序类型状态 ('hot': 最热 | 'latest': 最新)
+  // 4. 排序 Tab 类型状态 ('hot': 最热 | 'time': 最新)
   // ------------------------------------------
-  const [sortType, setSortType] = useState('hot');
+  const [type, setType] = useState('hot');
 
-  // 根据当前 sortType 动态计算排序后的评论列表
+  // 切换 Tab 点击处理函数
+  const handleTabChange = (type) => {
+    setType(type);
+  };
+
+  // 根据当前 type 动态计算排序后的评论列表
   const displayComments = [...comments].sort((a, b) => {
-    if (sortType === 'hot') {
+    if (type === 'hot') {
       return b.like - a.like; // 按点赞数降序排列
     }
     return b.rpid - a.rpid; // 按最新时间 (rpid时间戳) 降序排列
@@ -190,27 +199,23 @@ function CommentDemo() {
           <span style={{ fontSize: '14px', color: '#9499a0' }}>{comments.length}</span>
         </div>
 
-        {/* 右侧：最热 | 最新 排序切换标签 */}
+        {/* 右侧：循环渲染 tabs 数组标签，点击对应的 tab 即高亮并切换排序 */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px' }}>
-          <span
-            onClick={() => setSortType('hot')}
-            style={{
-              cursor: 'pointer',
-              fontWeight: sortType === 'hot' ? 'bold' : 'normal',
-              color: sortType === 'hot' ? '#222' : '#9499a0'
-            }}>
-            最热
-          </span>
-          <span style={{ color: '#e3e5e7' }}>|</span>
-          <span
-            onClick={() => setSortType('latest')}
-            style={{
-              cursor: 'pointer',
-              fontWeight: sortType === 'latest' ? 'bold' : 'normal',
-              color: sortType === 'latest' ? '#222' : '#9499a0'
-            }}>
-            最新
-          </span>
+          {tabs.map((item, index) => (
+            <React.Fragment key={item.type}>
+              <span
+                onClick={() => handleTabChange(item.type)}
+                style={{
+                  cursor: 'pointer',
+                  fontWeight: type === item.type ? 'bold' : 'normal',
+                  color: type === item.type ? '#222' : '#9499a0'
+                }}>
+                {item.text}
+              </span>
+              {/* 分隔符 '|' */}
+              {index < tabs.length - 1 && <span style={{ color: '#e3e5e7' }}>|</span>}
+            </React.Fragment>
+          ))}
         </div>
       </div>
 
