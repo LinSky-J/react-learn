@@ -76,6 +76,19 @@ function CommentDemo() {
   const [inputText, setInputText] = useState('');
 
   // ------------------------------------------
+  // 4. 排序类型状态 ('hot': 最热 | 'latest': 最新)
+  // ------------------------------------------
+  const [sortType, setSortType] = useState('hot');
+
+  // 根据当前 sortType 动态计算排序后的评论列表
+  const displayComments = [...comments].sort((a, b) => {
+    if (sortType === 'hot') {
+      return b.like - a.like; // 按点赞数降序排列
+    }
+    return b.rpid - a.rpid; // 按最新时间 (rpid时间戳) 降序排列
+  });
+
+  // ------------------------------------------
   // 删除评论处理函数
   // 遵循 useState 状态不可变原则，使用 filter 产生新数组
   // ------------------------------------------
@@ -169,9 +182,37 @@ function CommentDemo() {
         </div>
       </div>
 
-      <h2 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '20px' }}>
-        评论 <span style={{ fontSize: '14px', color: '#9499a0', fontWeight: 'normal' }}>({comments.length})</span>
-      </h2>
+      {/* 评论头部：评论数量与【最热 | 最新】排序选项（完全还原截图组件） */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '30px', marginBottom: '20px' }}>
+        {/* 左侧：标题与总数 */}
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+          <span style={{ fontSize: '20px', fontWeight: 'bold', color: '#222' }}>评论</span>
+          <span style={{ fontSize: '14px', color: '#9499a0' }}>{comments.length}</span>
+        </div>
+
+        {/* 右侧：最热 | 最新 排序切换标签 */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px' }}>
+          <span
+            onClick={() => setSortType('hot')}
+            style={{
+              cursor: 'pointer',
+              fontWeight: sortType === 'hot' ? 'bold' : 'normal',
+              color: sortType === 'hot' ? '#222' : '#9499a0'
+            }}>
+            最热
+          </span>
+          <span style={{ color: '#e3e5e7' }}>|</span>
+          <span
+            onClick={() => setSortType('latest')}
+            style={{
+              cursor: 'pointer',
+              fontWeight: sortType === 'latest' ? 'bold' : 'normal',
+              color: sortType === 'latest' ? '#222' : '#9499a0'
+            }}>
+            最新
+          </span>
+        </div>
+      </div>
 
       {/* 发表评论输入框 */}
       <div style={{ display: 'flex', gap: '16px', marginBottom: '30px' }}>
@@ -200,9 +241,9 @@ function CommentDemo() {
 
       <hr style={{ border: 'none', borderTop: '1px solid #e3e5e7', margin: '20px 0' }} />
 
-      {/* 评论列表区域 */}
+      {/* 评论列表区域（根据 sortType 动态渲染 displayComments） */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-        {comments.map((item) => (
+        {displayComments.map((item) => (
           <div key={item.rpid} style={{ display: 'flex', gap: '16px' }}>
             {/* 头像 */}
             <img 
