@@ -11,6 +11,8 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
 import classNames from 'classnames';
+import { v4 as uuidv4 } from 'uuid';
+import dayjs from 'dayjs';
 import './index.css';
 import avatarCurrent from './avatar_current.jpg';
 import avatarOther from './avatar_1.jpg';
@@ -18,7 +20,7 @@ import avatarOther from './avatar_1.jpg';
 // 初始默认评论列表数据（模仿参考图内容）
 const initialComments = [
   {
-    rpid: 1001,
+    rpid: uuidv4(), // 使用 uuid 生成唯一标识
     user: {
       id: 101, // 当前用户 ID
       name: '放手-青鸟',
@@ -26,12 +28,12 @@ const initialComments = [
       level: 'LV6'
     },
     content: 'react18 用js。。。还有创建项目用crap，说实话不像2023年的视频，生态很多都不适配了，但总归是18的视频还是有参考的',
-    ctime: '2023-10-24 22:20',
+    ctime: '10-24 22:20',
     like: 38,
     isLike: false
   },
   {
-    rpid: 1002,
+    rpid: uuidv4(), // 使用 uuid 生成唯一标识
     user: {
       id: 102, // 其它用户 ID
       name: '中兰蓝',
@@ -39,12 +41,12 @@ const initialComments = [
       level: 'LV4'
     },
     content: '记账本那个有些静态资源没有的，可以复制我的 git clone https://gitee.com/zuixihuanxingnai/react---bookkeeping.git',
-    ctime: '2026-01-02 14:21',
+    ctime: '01-02 14:21',
     like: 13,
     isLike: false
   },
   {
-    rpid: 1003,
+    rpid: uuidv4(), // 使用 uuid 生成唯一标识
     user: {
       id: 103, // 其它用户 ID
       name: '今宵酒醒何处-c',
@@ -52,7 +54,7 @@ const initialComments = [
       level: 'LV6'
     },
     content: '主后端的，新公司活少，抽空看看React，视频全程开弹幕，叽叽歪歪的人太多了，讲一个东西就有人跳出来讲Vue，都是搬砖工具，框架有相似之处是好事，学起来方便。只能说这些人班是没上的，懂哥是要当的。',
-    ctime: '2024-08-07 09:33',
+    ctime: '08-07 09:33',
     like: 94,
     isLike: false
   }
@@ -97,10 +99,10 @@ function CommentDemo() {
 
   // 使用 lodash 的 orderBy 方法根据当前 type 动态计算排序后的评论列表
   // - type === 'hot' 按点赞数 'like' 降序 ('desc')
-  // - type === 'time' 按发布时间戳 'rpid' 降序 ('desc')
+  // - type === 'time' 按发布时间 'ctime' 降序 ('desc')
   const displayComments = _.orderBy(
     comments,
-    type === 'hot' ? 'like' : 'rpid',
+    type === 'hot' ? 'like' : 'ctime',
     'desc'
   );
 
@@ -124,10 +126,10 @@ function CommentDemo() {
 
     // 构造一条全新的评论对象
     const newComment = {
-      rpid: Date.now(), // 用时间戳作为唯一ID
+      rpid: uuidv4(), // 使用 uuid 生成随机唯一标识
       user: { ...currentUser },
       content: inputText,
-      ctime: new Date().toLocaleString(),
+      ctime: dayjs(Date.now()).format('MM-DD HH:mm'), // 使用 dayjs 格式化时间 (月-日 时:分)
       like: 0,
       isLike: false
     };
