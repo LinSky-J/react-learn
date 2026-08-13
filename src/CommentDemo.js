@@ -8,6 +8,7 @@
 // ==========================================
 
 import React, { useState } from 'react';
+import './index.css';
 import avatarCurrent from './avatar_current.jpg';
 import avatarOther from './avatar_1.jpg';
 

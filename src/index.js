@@ -4,7 +4,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-//导入项目的根组件
+import './index.css';
 import App from './App';
 
 //把App根组件节点渲染到ID为ROOT的dom节点上
