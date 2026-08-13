@@ -1,5 +1,6 @@
 import EventBinding from './EventBinding';
 import ComponentDemo from './ComponentDemo';
+import UseStateDemo from './useStateDemo';
 
 // App->index.js->public/index.html(root)
 const count = 100
@@ -37,6 +38,9 @@ function App() {
       <hr />
       {/* 2. 渲染 React 事件绑定组件示例 */}
       <EventBinding />
+      <hr />
+      {/* 3. 渲染 React useState 状态示例 */}
+      <UseStateDemo />
     </div>
   );
 }
