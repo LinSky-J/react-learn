@@ -1,46 +1,51 @@
+import React, { useState } from 'react';
+import CommentDemo from './CommentDemo';
+import UseStateDemo from './useStateDemo';
 import EventBinding from './EventBinding';
 import ComponentDemo from './ComponentDemo';
-import UseStateDemo from './useStateDemo';
-
-// App->index.js->public/index.html(root)
-const count = 100
-
-function getName() {
-  return 'jack'
-}
-
-const list = [
-  { id: 1001, name1: 'vue' },
-  { id: 1002, name1: 'React' },
-  { id: 1003, name1: 'Angular' }
-]
-
-// 【基础条件渲染】1. 定义条件控制变量标志
-const isLogin = true
-
-// 【复杂条件渲染】1. 定义类型控制变量 (1, 2, 3 代表三种不同的情况)
-const type = 2 // 1: 单图模式, 2: 双图模式, 3: 三图模式
-
-// 【复杂条件渲染】2. 自定义函数结合 if-else，根据不同的条件返回不同的 JSX 结构
-function getArticleJSX() {
-  if (type === 1) {
-    return <div>单图文章模式</div>
-  } else if (type === 2) {
-    return <div>双图文章模式</div>
-  }
-}
 
 function App() {
+  // 切换页面 Tab 状态 ('comment' | 'useState' | 'event' | 'component')
+  const [activeTab, setActiveTab] = useState('comment');
+
   return (
-    <div className="App">
-      {/* 1. 渲染 React 组件调用示例 */}
-      <ComponentDemo />
-      <hr />
-      {/* 2. 渲染 React 事件绑定组件示例 */}
-      <EventBinding />
-      <hr />
-      {/* 3. 渲染 React useState 状态示例 */}
-      <UseStateDemo />
+    <div className="App" style={{ minHeight: '100vh', backgroundColor: '#f8f9fa' }}>
+      {/* 顶部导航栏 */}
+      <nav style={{ backgroundColor: '#fff', borderBottom: '1px solid #e3e5e7', padding: '12px 20px', display: 'flex', gap: '12px', alignItems: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+        <span style={{ fontWeight: 'bold', marginRight: '16px', fontSize: '16px', color: '#00aeec' }}>React 学习平台</span>
+        
+        <button
+          onClick={() => setActiveTab('comment')}
+          style={{ padding: '6px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontWeight: 'bold', background: activeTab === 'comment' ? '#00aeec' : '#f1f2f3', color: activeTab === 'comment' ? '#fff' : '#61666d' }}>
+          💬 评论区页面案例 (useState)
+        </button>
+
+        <button
+          onClick={() => setActiveTab('useState')}
+          style={{ padding: '6px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontWeight: 'bold', background: activeTab === 'useState' ? '#00aeec' : '#f1f2f3', color: activeTab === 'useState' ? '#fff' : '#61666d' }}>
+          📌 useState 核心规则
+        </button>
+
+        <button
+          onClick={() => setActiveTab('event')}
+          style={{ padding: '6px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontWeight: 'bold', background: activeTab === 'event' ? '#00aeec' : '#f1f2f3', color: activeTab === 'event' ? '#fff' : '#61666d' }}>
+          ⚡ 事件绑定示例
+        </button>
+
+        <button
+          onClick={() => setActiveTab('component')}
+          style={{ padding: '6px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontWeight: 'bold', background: activeTab === 'component' ? '#00aeec' : '#f1f2f3', color: activeTab === 'component' ? '#fff' : '#61666d' }}>
+          🧩 组件调用示例
+        </button>
+      </nav>
+
+      {/* 页面内容区域 */}
+      <main style={{ padding: '20px' }}>
+        {activeTab === 'comment' && <CommentDemo />}
+        {activeTab === 'useState' && <UseStateDemo />}
+        {activeTab === 'event' && <EventBinding />}
+        {activeTab === 'component' && <ComponentDemo />}
+      </main>
     </div>
   );
 }
