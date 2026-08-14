@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ReduxDemo from './ReduxDemo';
 import CustomHookDemo from './CustomHookDemo';
 import UseEffectDemo from './UseEffectDemo';
 import ComponentCommunication from './ComponentCommunication';
@@ -11,8 +12,8 @@ import ComponentDemo from './ComponentDemo';
 import './index.css';
 
 function App() {
-  // 切换页面 Tab 状态 ('customHook' | 'effect' | 'communication' | 'dom' | 'input' | 'comment' | 'useState' | 'event' | 'component')
-  const [activeTab, setActiveTab] = useState('customHook');
+  // 切换页面 Tab 状态 ('redux' | 'customHook' | 'effect' | 'communication' | 'dom' | 'input' | 'comment' | 'useState' | 'event' | 'component')
+  const [activeTab, setActiveTab] = useState('redux');
 
   return (
     <div className="App" style={{ minHeight: '100vh', backgroundColor: '#f8f9fa' }}>
@@ -21,8 +22,14 @@ function App() {
         <span style={{ fontWeight: 'bold', marginRight: '10px', fontSize: '16px', color: '#00aeec' }}>React 学习平台</span>
 
         <button
+          onClick={() => setActiveTab('redux')}
+          style={{ padding: '6px 14px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontWeight: 'bold', background: activeTab === 'redux' ? '#722ed1' : '#f1f2f3', color: activeTab === 'redux' ? '#fff' : '#61666d' }}>
+          🗄️ Redux 全局状态管理
+        </button>
+
+        <button
           onClick={() => setActiveTab('customHook')}
-          style={{ padding: '6px 14px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontWeight: 'bold', background: activeTab === 'customHook' ? '#722ed1' : '#f1f2f3', color: activeTab === 'customHook' ? '#fff' : '#61666d' }}>
+          style={{ padding: '6px 14px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontWeight: 'bold', background: activeTab === 'customHook' ? '#00aeec' : '#f1f2f3', color: activeTab === 'customHook' ? '#fff' : '#61666d' }}>
           🪝 自定义 Hook 实战
         </button>
 
@@ -77,6 +84,7 @@ function App() {
 
       {/* 页面内容区域 */}
       <main style={{ padding: '20px' }}>
+        {activeTab === 'redux' && <ReduxDemo />}
         {activeTab === 'customHook' && <CustomHookDemo />}
         {activeTab === 'effect' && <UseEffectDemo />}
         {activeTab === 'communication' && <ComponentCommunication />}
