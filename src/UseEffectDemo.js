@@ -10,6 +10,7 @@
 // ==========================================================
 
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 // ==========================================================
 // 案例 1：依赖项参数的三种执行机制对比
@@ -59,7 +60,7 @@ function DependencyComparisonDemo() {
 
 
 // ==========================================================
-// 案例 2：在 useEffect 中发送异步网络请求 (Fetch / API)
+// 案例 2：在 useEffect 中使用 axios 发送异步网络请求
 // 语法规则：useEffect 的回调函数不能直接声明为 async，需要在内部定义 async 函数并调用
 // ==========================================================
 function FetchDataDemo() {
@@ -67,42 +68,47 @@ function FetchDataDemo() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 1. 在内部定义 async 异步函数
+    // 1. 在 useEffect 内部定义 async 异步函数
     const getList = async () => {
       try {
         setLoading(true);
-        // 模拟 API 请求延时获取数据
-        const res = await new Promise(resolve => {
-          setTimeout(() => {
-            resolve([
-              { id: 1, title: '学会 React 基础语法 (JSX/事件/组件)' },
-              { id: 2, title: '掌握 useState 状态管理与不可变原则' },
-              { id: 3, title: '掌握 useEffect 处理异步请求与副作用' },
-              { id: 4, title: '理解组件通信 4 大核心模式' }
-            ]);
-          }, 800);
-        });
-        setList(res);
+        // 2. 使用 axios 发送 GET 请求获取频道列表数据
+        const res = await axios.get('http://geek.itheima.net/v1_0/channels');
+        console.log('axios 请求成功，获取到的数据：', res.data);
+        setList(res.data.data.channels);
+      } catch (error) {
+        console.warn('网络请求异常，加载备用数据:', error);
+        setList([
+          { id: 0, name: '推荐' },
+          { id: 1, name: 'React 进阶' },
+          { id: 2, name: 'Vue3 实战' },
+          { id: 3, name: 'JavaScript 核心' },
+          { id: 4, name: '前端工程化' }
+        ]);
       } finally {
         setLoading(false);
       }
     };
 
-    // 2. 调用异步函数
+    // 3. 调用异步函数
     getList();
-  }, []); // 👈 传入空数组 []，确保只在组件挂载时发送一次请求
+  }, []); // 👈 传入空数组 []，确保只在组件初次渲染挂载时发送 1 次网络请求
 
   return (
     <div style={{ border: '1px solid #b7eb8f', padding: '16px', borderRadius: '8px', backgroundColor: '#f6ffed', marginBottom: '24px' }}>
-      <h3 style={{ margin: '0 0 12px 0', color: '#237804' }}>2. 在 useEffect 中发送网络请求 (空依赖项 [])</h3>
+      <h3 style={{ margin: '0 0 12px 0', color: '#237804' }}>2. 在 useEffect 中使用 axios 发送网络请求 (空依赖项 [])</h3>
       {loading ? (
-        <p style={{ color: '#fa8c16' }}>⏳ 数据加载中 (模拟 fetch 异步请求)...</p>
+        <p style={{ color: '#fa8c16' }}>⏳ 数据加载中 (axios.get 请求中)...</p>
       ) : (
-        <ul style={{ paddingLeft: '20px', margin: 0 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
           {list.map(item => (
-            <li key={item.id} style={{ marginBottom: '6px' }}>{item.title}</li>
+            <span
+              key={item.id}
+              style={{ backgroundColor: '#fff', border: '1px solid #b7eb8f', padding: '4px 12px', borderRadius: '16px', fontSize: '13px', color: '#237804', fontWeight: '500' }}>
+              🏷️ {item.name}
+            </span>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );
