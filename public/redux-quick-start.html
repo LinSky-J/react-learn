@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redux 快速体验 - 原生纯 JS 计数器</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 40px;
+      max-width: 600px;
+      margin: 0 auto;
+      color: #333;
+    }
+    h2 {
+      color: #a8071a;
+      margin-bottom: 8px;
+    }
+    .desc {
+      color: #666;
+      margin-bottom: 24px;
+      font-size: 15px;
+    }
+    .counter-box {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 30px 0;
+    }
+    .btn {
+      width: 48px;
+      height: 48px;
+      font-size: 24px;
+      font-weight: bold;
+      border: 2px solid #333;
+      border-radius: 8px;
+      background-color: #f5f5f5;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .btn:hover {
+      background-color: #e8e8e8;
+    }
+    .btn:active {
+      transform: scale(0.95);
+    }
+    #count {
+      font-size: 32px;
+      font-weight: bold;
+      min-width: 40px;
+      text-align: center;
+    }
+    .steps {
+      background: #fafafa;
+      border: 1px solid #e8e8e8;
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .steps code {
+      background-color: #f0f0f0;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #d4380d;
+    }
+  </style>
+  <!-- 引入 CDN 纯 Redux 核心库 (不依赖任何 React 框架) -->
+  <script src="https://cdn.jsdelivr.net/npm/redux@4.2.1/dist/redux.min.js"></script>
+</head>
+<body>
+
+  <h2>Redux快速体验</h2>
+  <div class="desc">不和任何框架绑定，不使用任何构建工具，使用纯 Redux 实现计数器</div>
+
+  <!-- 计数器 UI 结构 -->
+  <div class="counter-box">
+    <button class="btn" id="decrement">-</button>
+    <span id="count">0</span>
+    <button class="btn" id="increment">+</button>
+  </div>
+
+  <div class="steps">
+    <strong>💡 使用步骤：</strong>
+    <ol>
+      <li>定义一个 <code>reducer</code> 函数（根据当前想要做的修改返回一个新的状态）</li>
+      <li>使用 <code>createStore</code> 方法传入 reducer 函数生成一个 <code>store</code> 实例对象</li>
+      <li>使用 store 实例的 <code>subscribe</code> 方法订阅数据的变化（数据一旦变化，可以得到通知）</li>
+      <li>使用 store 实例的 <code>dispatch</code> 方法提交 action 对象触发数据变化（告诉 reducer 你想怎么改数据）</li>
+      <li>使用 store 实例的 <code>getState</code> 方法获取最新的状态数据更新到视图中</li>
+    </ol>
+  </div>
+
+  <script>
+    // ==========================================================
+    // 1. 定义一个 reducer 函数
+    // 作用：根据当前想要做的修改 (action) 返回一个新的状态 (state)
+    // 规则：必须是纯函数，接收 (state = 初始状态, action)
+    // ==========================================================
+    function counterReducer(state = { count: 0 }, action) {
+      if (action.type === 'INCREMENT') {
+        return { count: state.count + 1 };
+      }
+      if (action.type === 'DECREMENT') {
+        return { count: state.count - 1 };
+      }
+      return state;
+    }
+
+    // ==========================================================
+    // 2. 使用 createStore 方法传入 reducer 函数 生成一个 store 实例对象
+    // ==========================================================
+    const store = Redux.createStore(counterReducer);
+
+    // 获取 DOM 元素
+    const countEl = document.getElementById('count');
+    const btnInc = document.getElementById('increment');
+    const btnDec = document.getElementById('decrement');
+
+    // ==========================================================
+    // 3. 使用 store 实例的 subscribe 方法 订阅数据的变化
+    //    (数据一旦变化，会立刻自动执行回调函数得到通知)
+    // 5. 使用 store 实例的 getState 方法 获取最新的状态数据更新到视图中
+    // ==========================================================
+    store.subscribe(() => {
+      console.log('📢 store 数据发生变化了:', store.getState());
+      // 5. 获取最新状态更新到 DOM 页面视图中
+      countEl.innerText = store.getState().count;
+    });
+
+    // ==========================================================
+    // 4. 使用 store 实例的 dispatch 方法提交 action 对象 触发数据变化
+    //    (告诉 reducer 你想怎么改数据)
+    // ==========================================================
+    btnInc.addEventListener('click', () => {
+      // 派发递增 action
+      store.dispatch({ type: 'INCREMENT' });
+    });
+
+    btnDec.addEventListener('click', () => {
+      // 派发递减 action
+      store.dispatch({ type: 'DECREMENT' });
+    });
+  </script>
+
+</body>
+</html>
